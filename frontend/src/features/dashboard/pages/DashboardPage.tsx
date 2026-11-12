@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FiBell,
   FiCalendar,
@@ -16,6 +17,9 @@ import {
 } from "react-icons/fi";
 import { MdOutlinePets } from "react-icons/md";
 
+// Importe o seu serviço de storage se possuir um (ex: authStorage.clear())
+// import { authStorage } from "../../auth/storage/auth.storage"; 
+
 const pets = [
   { name: "Mel", breed: "Golden Retriever", age: "3 anos", emoji: "🐕", color: "bg-[#FFF0E8]", tag: "Tudo em dia" },
   { name: "Nina", breed: "Gatinha • Siamês", age: "1 ano", emoji: "🐈", color: "bg-[#EAF4EC]", tag: "Atenção à vacina" },
@@ -29,6 +33,18 @@ const appointments = [
 
 export default function DashboardPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // Limpe os dados do usuário do localStorage / sessionStorage
+    localStorage.removeItem("token"); 
+    // ou authStorage.clear(); se estiver usando sua classe customizada
+
+    // Redirecione para a tela de login
+    navigate("/login", { replace: true });
+  };
 
   return (
     <main className="min-h-screen bg-[#FBF9F4] text-[#153229]">
@@ -109,7 +125,13 @@ export default function DashboardPage() {
                 {pets.map((pet) => (
                   <article key={pet.name} className="rounded-3xl border border-[#EEEAE2] bg-white p-5 transition hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(21,50,41,0.06)]">
                     <div className={`mb-4 grid h-24 place-items-center rounded-2xl ${pet.color} text-6xl`}>{pet.emoji}</div>
-                    <div className="flex items-start justify-between"><div><h3 className="font-display text-xl font-extrabold">{pet.name}</h3><p className="mt-1 text-xs text-[#92968E]">{pet.breed} • {pet.age}</p></div><FiChevronRight className="mt-1 text-[#A3A69E]" /></div>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-display text-xl font-extrabold">{pet.name}</h3>
+                        <p className="mt-1 text-xs text-[#92968E]">{pet.breed} • {pet.age}</p>
+                      </div>
+                      <FiChevronRight className="mt-1 text-[#A3A69E]" />
+                    </div>
                     <span className={`mt-4 inline-flex rounded-full px-3 py-1.5 text-xs font-bold ${pet.name === "Mel" ? "bg-[#EAF4EC] text-[#3F9271]" : "bg-[#FFF0E8] text-[#D95C3F]"}`}>{pet.name === "Mel" ? "✓ " : "• "}{pet.tag}</span>
                   </article>
                 ))}
@@ -132,7 +154,14 @@ export default function DashboardPage() {
             </section>
           </div>
 
-          <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-[#E9E6DE] pt-5 text-xs text-[#A3A69E]"><span>Feito com <span className="text-[#FF6B4A]">♥</span> para quem ama pets.</span><span>PetCare • Seu cuidado, nosso carinho</span><a href="/login" className="inline-flex items-center gap-1.5 hover:text-[#153229]"><FiLogOut /> Sair</a></footer>
+          <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-[#E9E6DE] pt-5 text-xs text-[#A3A69E]">
+            <span>Feito com <span className="text-[#FF6B4A]">♥</span> para quem ama pets.</span>
+            <span>PetCare • Seu cuidado, nosso carinho</span>
+            {/* O botão de Logout agora invoca a função handleLogout em vez de usar href diretamente */}
+            <button onClick={handleLogout} className="inline-flex items-center gap-1.5 hover:text-[#153229] font-bold">
+              <FiLogOut /> Sair
+            </button>
+          </footer>
         </section>
       </div>
     </main>

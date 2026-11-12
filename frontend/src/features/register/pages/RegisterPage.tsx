@@ -1,84 +1,132 @@
-import { useState } from "react";
-import type { FormEvent } from "react";
-import { MdOutlinePets } from "react-icons/md";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRegister } from '../hooks/use-register';
+import { useRoles } from '../../role/hooks/use-role'; // Importe o hook de cargos
 
-import { useRegister } from "../hooks/use-login";
+export function RegisterPage() {
+  const navigate = useNavigate();
+  const { register, isLoading, error } = useRegister();
+  const { roles, isLoadingRoles, rolesError } = useRoles(); // Inicia a busca de cargos
+  
+  const [formData, setFormData] = useState({
+    nome: '',
+    email: '',
+    senha: '',
+    id_cargo: ''
+  });
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-export default function AuthPage() {
-  const [nome, _setNome] = useState("");
-  const [id_cargo, _setIdCargo] = useState("405d74da-5363-4e26-86e5-2ddaca6657a4")
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-
-  const { mutate: register, isPending, error } = useRegister();
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    register({ nome, id_cargo, email, senha });
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const success = await register(formData);
+    if (success) {
+      navigate('/login'); 
+    }
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="flex items-center gap-2">
-        <MdOutlinePets size={24} color="text-green-light" />
-        <h2 className="text-[20px] font-black text-green">pet</h2>
-        <h2 className="text-[20px] font-black text-orange-primary">care</h2>
-      </div>
-
-      <div className="text-center mt-10">
-        <p className="text-green text-3xl font-bold mb-4">
-          Entrar na sua conta
-        </p>
-        <p className="text-gray-dark mb-10">Acompanhe a rotina do seu pet</p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="w-100 flex flex-col gap-4">
-        <div className="flex-1">
-          <p className="text-green mb-1 font-medium text-sm">E-mail</p>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="voce@email.com"
-            className="bg-primary border-b border-gray-light pb-3 w-full text-sm font-medium"
-          />
-        </div>
-
-        <div className="flex-1">
-          <p className="text-green mb-1 font-medium text-sm">Senha</p>
-          <input
-            type="password"
-            required
-            value={senha}
-            onChange={(event) => setSenha(event.target.value)}
-            placeholder="Sua senha"
-            className="bg-primary border-b border-gray-light pb-3 w-full text-sm font-medium"
-          />
+    <div className="min-h-screen flex items-center justify-center bg-[#FBF9F4] p-4 text-[#153229]">
+      <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-[0_12px_40px_rgba(21,50,41,0.08)] border border-[#E9E6DE]">
+        
+        <div className="mb-8 text-center">
+          <h2 className="font-display text-3xl font-extrabold tracking-tight">
+            Cadastro de Funcionário
+          </h2>
+          <p className="mt-2 text-sm text-[#92968E]">
+            Preencha os dados abaixo para registrar um novo acesso.
+          </p>
         </div>
 
         {error && (
-          <p className="text-orange-primary text-sm font-medium">
-            E-mail ou senha invalidos.
-          </p>
+          <div className="mb-6 rounded-xl bg-red-50 p-4 border border-red-100 text-sm text-red-600">
+            {error}
+          </div>
         )}
+        
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div>
+            <label className="mb-1.5 block text-sm font-bold text-[#153229]">Nome Completo</label>
+            <input 
+              type="text" 
+              name="nome" 
+              placeholder="Digite o nome" 
+              value={formData.nome} 
+              onChange={handleChange} 
+              required 
+              className="w-full rounded-xl border border-[#E9E6DE] bg-white px-4 py-3.5 text-sm outline-none transition-all placeholder:text-[#A3A69E] hover:border-[#C4C7C0] focus:border-[#3F9271] focus:ring-4 focus:ring-[#EAF4EC]"
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="bg-green-dark mt-10 text-white cursor-pointer shadow-brand transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_20px_rgba(21,50,41,0.22)] font-semibold rounded-full py-3 w-full disabled:opacity-60"
-        >
-          {isPending ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
+          <div>
+            <label className="mb-1.5 block text-sm font-bold text-[#153229]">E-mail</label>
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="exemplo@empresa.com" 
+              value={formData.email} 
+              onChange={handleChange} 
+              required 
+              className="w-full rounded-xl border border-[#E9E6DE] bg-white px-4 py-3.5 text-sm outline-none transition-all placeholder:text-[#A3A69E] hover:border-[#C4C7C0] focus:border-[#3F9271] focus:ring-4 focus:ring-[#EAF4EC]"
+            />
+          </div>
 
-      <div className="flex items-center gap-1 mt-6 text-sm">
-        <p className="text-gray-dark">Ainda não tem conta?</p>
-        <a href="" className="text-green underline font-medium">
-          Cadastre-seu pet
-        </a>
+          <div>
+            <label className="mb-1.5 block text-sm font-bold text-[#153229]">Senha</label>
+            <input 
+              type="password" 
+              name="senha" 
+              placeholder="••••••••" 
+              value={formData.senha} 
+              onChange={handleChange} 
+              required 
+              className="w-full rounded-xl border border-[#E9E6DE] bg-white px-4 py-3.5 text-sm outline-none transition-all placeholder:text-[#A3A69E] hover:border-[#C4C7C0] focus:border-[#3F9271] focus:ring-4 focus:ring-[#EAF4EC]"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-bold text-[#153229]">Cargo</label>
+            <select
+              name="id_cargo"
+              value={formData.id_cargo}
+              onChange={handleChange}
+              required
+              disabled={isLoadingRoles}
+              className="w-full appearance-none rounded-xl border border-[#E9E6DE] bg-white px-4 py-3.5 text-sm outline-none transition-all hover:border-[#C4C7C0] focus:border-[#3F9271] focus:ring-4 focus:ring-[#EAF4EC] disabled:bg-gray-50 disabled:text-gray-400"
+            >
+              <option value="" disabled>
+                {isLoadingRoles ? "Carregando cargos..." : "Selecione um cargo"}
+              </option>
+              {roles.map((cargo) => (
+                <option key={cargo.id} value={cargo.id}>
+                  {cargo.nome}
+                </option>
+              ))}
+            </select>
+            {rolesError && <p className="mt-1 text-xs text-red-500">{rolesError}</p>}
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={isLoading || isLoadingRoles}
+            className="mt-2 w-full rounded-xl bg-[#3F9271] px-4 py-4 text-sm font-bold text-white transition-all hover:bg-[#2E795A] focus:outline-none focus:ring-4 focus:ring-[#EAF4EC] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isLoading ? 'Processando...' : 'Cadastrar Funcionário'}
+          </button>
+        </form>
+
+        <div className="mt-8 text-center text-sm text-[#92968E]">
+          Já possui cadastro?{' '}
+          <button 
+            type="button"
+            onClick={() => navigate('/login')}
+            className="font-bold text-[#3F9271] hover:underline"
+          >
+            Fazer login
+          </button>
+        </div>
       </div>
     </div>
   );
