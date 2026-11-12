@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+    background-color: #FBF9F4;
+    color: #182420;
+    scroll-behavior: smooth;
+
+}
+
+@theme {
+    --font-display: "Baloo 2" , sans-serif;
+    --font-sans: "Manrope" , sans-serif;
+
+    --shadow-brand: 0 6px 16px rgba(21, 50, 41, 0, 18);
+}
+
+@layer base {
+    body {
+        font-family: var(--font-sans);
+    }
+}
