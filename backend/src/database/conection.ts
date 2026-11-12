@@ -1,14 +1,12 @@
-import 'dotenv/config'
-import pg from 'pg'
+import "dotenv/config";
+import pg from "pg";
 
-const {Pool} = pg
+const { Pool } = pg;
 
-export const pool = new Pool()
+export const pool = new Pool();
 
 pool.on("error", (error) => {
-    console.error(
-        "Conexão iddle encontrada", error
-    );
+  console.error("Conexão iddle encontrada", error);
 
-    process.exit(1)
-})
+  process.exit(1);
+});

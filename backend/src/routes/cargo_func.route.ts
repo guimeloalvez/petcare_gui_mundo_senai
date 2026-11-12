@@ -40,7 +40,7 @@ cargo_func_router.post(
   async (request: Request<{}, {}, CriarCargoFunc>, response: Response) => {
     try {
       const dados = request.body;
-
+      
       const cargo_func = await cargo_funcService.create(dados);
       return response.status(201).json(cargo_func);
     } catch (error) {

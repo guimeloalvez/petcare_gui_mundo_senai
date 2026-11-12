@@ -1,0 +1,24 @@
+info:
+  name: create_funcionario
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:3000/funcionario
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "teste",
+        "email": "teste@teste.com",
+        "senha": "teste@123",
+        "id_cargo": "958a506a-db00-4a61-b232-a74244d0cfce"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

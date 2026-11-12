@@ -12,11 +12,14 @@ class CargoFuncService {
   }
 
   async create(dados: CriarCargoFunc): Promise<CargoFunc> {
+    console.log("cheguei aqui");
+    
     const res = await pool.query<CargoFunc>(
       "INSERT INTO cargo_func (nome) VALUES ($1) RETURNING *",
       [dados.nome],
     );
-
+    console.log("res", res);
+    
     const cargo_func = res.rows[0];
     if (!cargo_func) {
       throw new Error("O banco não retornou o cargo cadastrado");

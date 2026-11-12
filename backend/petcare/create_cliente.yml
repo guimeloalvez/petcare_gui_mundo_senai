@@ -1,0 +1,24 @@
+info:
+  name: create_cliente
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:3000/cliente
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "teste",
+        "telefone": "000000000",
+        "idade": 15,
+        "email": "teste@teste.com"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
