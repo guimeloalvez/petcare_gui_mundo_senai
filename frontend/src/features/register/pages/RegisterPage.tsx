@@ -6,8 +6,8 @@ import { useRegister } from "../hooks/use-login";
 
 
 export default function AuthPage() {
-  const [nome, setNome] = useState("");
-  const [id_cargo, setIdCargo] = useState("405d74da-5363-4e26-86e5-2ddaca6657a4")
+  const [nome, _setNome] = useState("");
+  const [id_cargo, _setIdCargo] = useState("405d74da-5363-4e26-86e5-2ddaca6657a4")
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
