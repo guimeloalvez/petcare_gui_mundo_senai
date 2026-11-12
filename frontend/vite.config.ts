@@ -13,9 +13,10 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
     ],
     server: {
+      allowedHosts: true,
       proxy: {
         "/api": {
-          target: env.API_PROXY_TARGET ?? "http://localhost:3000",
+          target: env.API_PROXY_TARGET ?? "https://visits-placed-broker-minneapolis.trycloudflare.com/",
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ""),
         },
